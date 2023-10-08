@@ -3,11 +3,49 @@ import MainLayout from '../../components/MainLayout'
 import BreadCrumbs from '../../components/BreadCrumbs'
 import {images} from '../../constants';
 import {Link} from 'react-router-dom';
+import SuggestedPosts from './container/SuggestedPosts';
 
 const breadCrumbsData=[
     {name:"Home",link:"/"},
     {name:"Blog",link:"/blog"},
     {name:"Article Title",link:"/blog/1"},
+]
+
+const postsData=[
+    {
+        _id:"1",
+        image:images.postImage,
+        title:"Help Children Get Better Education",
+        createdAt:"2023-04-15"
+    },
+    {
+        _id:"2",
+        image:images.postImage,
+        title:"Help Children Get Better Education",
+        createdAt:"2023-04-15"
+    },
+    {
+        _id:"3",
+        image:images.postImage,
+        title:"Help Children Get Better Education",
+        createdAt:"2023-04-15"
+    },
+    {
+        _id:"4",
+        image:images.postImage,
+        title:"Help Children Get Better Education",
+        createdAt:"2023-04-15"
+    }
+]
+
+const tagsData=[
+    "Medical",
+    "Lifestyle",
+    "Learn",
+    "Healthy",
+    "Food",
+    "Diet",
+    "Education"
 ]
 
 export default function ArticleDetailPage() {
@@ -42,6 +80,12 @@ export default function ArticleDetailPage() {
             </p>
           </div>
         </article>
+        <SuggestedPosts
+          header="Latest Article"
+          posts={postsData}
+          tags={tagsData}
+          className="mt-8"
+        />
       </section>
     </MainLayout>
   );

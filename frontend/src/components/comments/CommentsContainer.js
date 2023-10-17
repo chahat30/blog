@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import CommentForm from './CommentForm'
 import { getCommentsData } from '../../data/comments';
+import Comment from './Comment';
 
 export default function CommentsContainer({className}) {
 
   const [comments,setComments]=useState([]);
+  const mainComments=comments.filter((comment)=>comment.parent===null);
+
   console.log(comments);
   
   useEffect(()=>{
@@ -35,6 +38,11 @@ export default function CommentsContainer({className}) {
   return (
     <div className={`${className}`}>
       <CommentForm btnLabel="Send" formSubmitHandler={(text)=>addCommentHandler(text)}></CommentForm>
+      <div className='space-y-4 mt-8'>
+        {mainComments.map((comment)=>(
+          <Comment comment={comment}/>
+        ))}
+      </div>
     </div>
   )
 }

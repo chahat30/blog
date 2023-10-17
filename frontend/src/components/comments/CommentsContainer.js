@@ -5,6 +5,7 @@ import { getCommentsData } from '../../data/comments';
 export default function CommentsContainer({className}) {
 
   const [comments,setComments]=useState([]);
+  console.log(comments);
   
   useEffect(()=>{
     (async()=>{

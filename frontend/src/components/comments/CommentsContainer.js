@@ -3,7 +3,7 @@ import CommentForm from './CommentForm'
 import { getCommentsData } from '../../data/comments';
 import Comment from './Comment';
 
-export default function CommentsContainer({className}) {
+export default function CommentsContainer({className,logginedUserId}) {
 
   const [comments,setComments]=useState([]);
   const mainComments=comments.filter((comment)=>comment.parent===null);
@@ -40,7 +40,7 @@ export default function CommentsContainer({className}) {
       <CommentForm btnLabel="Send" formSubmitHandler={(text)=>addCommentHandler(text)}></CommentForm>
       <div className='space-y-4 mt-8'>
         {mainComments.map((comment)=>(
-          <Comment comment={comment}/>
+          <Comment comment={comment} logginedUserId={logginedUserId}/>
         ))}
       </div>
     </div>

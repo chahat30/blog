@@ -80,7 +80,7 @@ export default function ArticleDetailPage() {
               ut hendrerit metus.
             </p>
           </div>
-          <CommentsContainer className="mt-10"/>
+          <CommentsContainer className="mt-10" logginedUserId="a"/>
         </article>
         <SuggestedPosts
           header="Latest Article"

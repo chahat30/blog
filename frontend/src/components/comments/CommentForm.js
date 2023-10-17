@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
 
-export default function CommentForm({btnLabel}) {
+export default function CommentForm({btnLabel,formSubmitHandler}) {
 
     const[text,setText]=useState("");
 
     const onSubmitHandler=(e)=>{
         e.preventDefault();
+        formSubmitHandler(text);
+        setText("");
     }
 
     const onChangeHandler=(e)=>{

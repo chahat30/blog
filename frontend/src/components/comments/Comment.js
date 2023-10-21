@@ -10,6 +10,7 @@ export default function Comment({
   setAffectedComment,
   addCommentHandler,
   parentId = null,
+  updateComment
 }) {
   const isUserLoggined = Boolean(logginedUserId);
   const BelongsToUser = logginedUserId === comment.user._id;
@@ -17,6 +18,10 @@ export default function Comment({
     affectedComment &&
     affectedComment.type === "replying" &&
     affectedComment._id === comment._id;
+  const isEditing =
+    affectedComment &&
+    affectedComment.type === "editing" &&
+    affectedComment._id === comment._id;  
   const repliedCommentId = parentId ? parentId : comment._id;
   const replyOnUserId = comment.user._id;
 
@@ -39,9 +44,19 @@ export default function Comment({
             hour: "2-digit",
           })}
         </span>
-        <p className="mt-[10px] font-opensans text-dark-light">
-          {comment.desc}
-        </p>
+        {!isEditing && (
+          <p className="mt-[10px] font-opensans text-dark-light">
+            {comment.desc}
+          </p>
+        )}
+        {isEditing && (
+          <CommentForm
+            btnLabel="Update"
+            formSubmitHandler={(value) => updateComment(value, comment._id)}
+            formCancelHandler={() => setAffectedComment(null)}
+            initialText={comment.desc}
+          />
+        )}
         <div className=" flex items-center gap-x-3 text-dark-light font-roboto text-sm mt-3 mb-3">
           {isUserLoggined && (
             <button
@@ -56,7 +71,12 @@ export default function Comment({
           )}
           {BelongsToUser && (
             <>
-              <button className="flex items-center space-x-2">
+              <button
+                className="flex items-center space-x-2"
+                onClick={() =>
+                  setAffectedComment({ type: "editing", _id: comment._id })
+                }
+              >
                 <FiEdit2 className="w-4 h-auto" />
                 <span>Edit</span>
               </button>
@@ -69,11 +89,11 @@ export default function Comment({
         </div>
         {isReplying && (
           <CommentForm
-            btnLabel={"Reply"}
+            btnLabel="Reply"
             formSubmitHandler={(value) =>
               addCommentHandler(value, repliedCommentId, replyOnUserId)
             }
-            formCancelHandler={()=>setAffectedComment(null)}
+            formCancelHandler={() => setAffectedComment(null)}
           />
         )}
       </div>

@@ -11,7 +11,8 @@ export default function Comment({
   addCommentHandler,
   parentId = null,
   updateComment,
-  deleteComment
+  deleteComment,
+  replies
 }) {
   const isUserLoggined = Boolean(logginedUserId);
   const BelongsToUser = logginedUserId === comment.user._id;
@@ -81,9 +82,9 @@ export default function Comment({
                 <FiEdit2 className="w-4 h-auto" />
                 <span>Edit</span>
               </button>
-              <button 
+              <button
                 className="flex items-center space-x-2"
-                onClick= {() => deleteComment(comment._id)}
+                onClick={() => deleteComment(comment._id)}
               >
                 <FiTrash className="w-4 h-auto" />
                 <span>Delete</span>
@@ -99,6 +100,24 @@ export default function Comment({
             }
             formCancelHandler={() => setAffectedComment(null)}
           />
+        )}
+        {replies.length > 0 && (
+          <div>
+            {replies.map((reply) => (
+              <Comment
+                key={reply._id}
+                addCommentHandler={addCommentHandler}
+                affectedComment={affectedComment}
+                setAffectedComment={setAffectedComment}
+                comment={reply}
+                deleteComment={deleteComment}
+                logginedUserId={logginedUserId}
+                replies={[]}
+                updateComment={updateComment}
+                parentId={comment._id}
+              />
+            ))}
+          </div>
         )}
       </div>
     </div>

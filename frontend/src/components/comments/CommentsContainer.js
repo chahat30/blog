@@ -19,7 +19,7 @@ export default function CommentsContainer({ className, logginedUserId }) {
 
   const addCommentHandler = (text, parent = null, replyOnUser = null) => {
     const newComment = {
-      _id: "10",
+      _id: Math.random().toString(),
       user: {
         _id: "a",
         name: "Mohammad Rezaii",
@@ -28,7 +28,7 @@ export default function CommentsContainer({ className, logginedUserId }) {
       post: "1",
       parent: parent,
       replyOnUser: replyOnUser,
-      createdAt: "2022-12-31T17:22:05.092+0000",
+      createdAt:new Date().toISOString(),
     };
     setComments((currState) => {
       return [newComment, ...currState];
@@ -54,6 +54,13 @@ export default function CommentsContainer({ className, logginedUserId }) {
     setComments(updatedComments);
   }
 
+  const getRepliesHandler = (commentId) => {
+    return comments.filter((comment) => comment.parent === commentId)
+    .sort((a,b) => {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    });
+  }
+
   return (
     <div className={`${className}`}>
       <CommentForm
@@ -71,6 +78,7 @@ export default function CommentsContainer({ className, logginedUserId }) {
             addCommentHandler={addCommentHandler}
             updateComment={updateCommentHandler}
             deleteComment={deleteCommentHandler}
+            replies={getRepliesHandler(comment._id)}
           />
         ))}
       </div>

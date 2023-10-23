@@ -35,7 +35,7 @@ export default function Comment({
         className="h-9 w-9 object-cover rounded-full"
       />
       <div className="flex flex-col flex-1">
-        <h5 className="font-bold text-dark-hard text-xs">
+        <h5 className="font-bold text-dark-hard text-xs lg:text-sm">
           {comment.user.name}
         </h5>
         <span className="text-xs text-dark-light">

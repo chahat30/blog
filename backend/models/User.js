@@ -1,4 +1,6 @@
 import {Schema , model } from 'mongoose';
+import {hash} from 'bcryptjs';
+import {sign} from 'jsonwebtoken';
 
 const UserSchema= new Schema({
     avatar: { type: String, default: "" },
@@ -13,6 +15,19 @@ const UserSchema= new Schema({
     timestamps: true        //options: automatically adds 2 fields: created at and updated at
 }
 );
+
+UserSchema.pre('save', async function (next){
+    if(this.isModified('password'))
+    {
+        this.password= await hash(this.password, 10);
+        return next();
+    }
+    return next();
+})
+
+UserSchema.methods.generateJWT= async function() {
+    return await sign({id: this._id}, process.env.JWT_SECRET, {expiresIn: '30d'});
+}
 
 const User = model("User", UserSchema);     //model name, schema
 export default User;

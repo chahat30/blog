@@ -2,7 +2,6 @@ import {Schema , model } from 'mongoose';
 import {hash} from 'bcryptjs';
 import {sign} from 'jsonwebtoken';
 
-// test change
 const UserSchema= new Schema({
     avatar: { type: String, default: "" },
     name: { type: String, required: true},

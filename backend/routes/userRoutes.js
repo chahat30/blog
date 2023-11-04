@@ -7,5 +7,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/profile', authGuard, userProfile);
 router.put('/updateProfile',authGuard ,updateProfile);
+router.put('/updateProfilePicture', authGuard, updateProfile);
 
 export default router;

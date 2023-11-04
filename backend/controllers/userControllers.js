@@ -85,3 +85,32 @@ export const userProfile = async (req, res, next) =>{
         next(error);
     }
 }
+
+export const updateProfile = async (req, res, next) => {
+    try {
+        let user = await User.findById(req.user._id);
+        if(!user){   //if user not found with this id
+            throw new Error("User not found");
+        }
+        user.name = req.body.name || user.name; //The line of code essentially says: "If req.body.name is defined (i.e., it has a value), update the user.name property with the value of req.body.name. If req.body.name is not defined or is falsy (e.g., null, undefined, or an empty string), leave user.name unchanged."
+        user.email= req.body.email || user.email;
+        if(req.body.password && req.body.password.length < 6) {
+            throw new Error("Password length must be atleast 6 characters");
+        } else if (req.body.password ){
+            user.password= req.body.password;
+        }
+
+        const updatedUserProfile= await user.save();
+        res.json({
+            _id: updatedUserProfile._id,
+            avatar: updatedUserProfile.avatar,
+            name: updatedUserProfile.name,
+            email: updatedUserProfile.email,
+            verified: updatedUserProfile.verified,
+            admin: updatedUserProfile.admin,
+            token: await updatedUserProfile.generateJWT(),   
+        });
+    } catch (error) {
+        next(error);
+    }
+} 

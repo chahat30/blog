@@ -17,11 +17,11 @@ const uploadPicture = multer({
     },
     fileFilter: function (req, file, cb) {
         let ext = path.extname(file.originalname);
-        if(ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg'){
-            return cb(new Error("Only images are allowed"));
+        if (ext !== ".png" && ext !== ".jpg" && ext !== ".jpeg") {
+          return cb(new Error("Only images are allowed"));
         }
         cb(null, true);
-    }
+      },
 });
 
 export {uploadPicture};

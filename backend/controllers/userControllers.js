@@ -1,4 +1,6 @@
+import { uploadPicture } from "../middleware/uploadPictureMiddleware";
 import User from "../models/User";
+import { fileRemover } from "../utils/fileRemover";
 
 export const registerUser= async (req, res, next) => {
     try {
@@ -117,7 +119,52 @@ export const updateProfile = async (req, res, next) => {
 
 export const updateProfilePicture = async (req, res, next) =>{
     try {
-        
+        const upload = uploadPicture.single('profilePicture');  // The code uses a middleware function called uploadPicture. This middleware is designed to handle file uploads, specifically for a single file with the field name 'profilePicture'. The upload function is configured to work with this middleware, which processes the uploaded file.
+        upload(req, res, async function(err){                   //This is the way Multer (a popular middleware for handling file uploads) is typically used. It processes the uploaded file and calls the provided function when the processing is complete.
+            if(err)
+            {
+                const error = new Error("An unknown error occured while uploading - " + err.message);
+                next(error);
+            }
+            else
+            {
+                if (req.file) {
+                  let filename;
+                  let updatedUser = await User.findById(req.user._id);
+                  filename = updatedUser.avatar;
+                  if (filename) {
+                    fileRemover(filename);
+                  }
+                  updatedUser.avatar = req.file.filename;
+                  await updatedUser.save();
+                  res.json({
+                    _id: updatedUser._id,
+                    avatar: updatedUser.avatar,
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                    verified: updatedUser.verified,
+                    admin: updatedUser.admin,
+                    token: await updatedUser.generateJWT(),
+                  });
+                } else {
+                  let filename;
+                  let updatedUser = await User.findById(req.user._id);
+                  filename = updatedUser.avatar;
+                  updatedUser.avatar = "";
+                  await updatedUser.save();
+                  fileRemover(filename);
+                  res.json({
+                    _id: updatedUser._id,
+                    avatar: updatedUser.avatar,
+                    name: updatedUser.name,
+                    email: updatedUser.email,
+                    verified: updatedUser.verified,
+                    admin: updatedUser.admin,
+                    token: await updatedUser.generateJWT(),
+                  });
+                }
+            }
+        })
     } catch (error) {
         next(error);
     }

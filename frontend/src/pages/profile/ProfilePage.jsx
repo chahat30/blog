@@ -3,13 +3,16 @@ import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
 import { useDispatch, useSelector} from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
-import { getUserProfile } from '../../services/index/users';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getUserProfile, updateProfile } from '../../services/index/users';
 import ProfilePicture from '../../components/ProfilePicture';
+import { userActions } from '../../store/reducers/userReducers';
+import toast from 'react-hot-toast';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const queryClient= useQueryClient();
   const userState = useSelector(state => state.user);
 
     const {data: profileData, isLoading: profileIsLoading, error: profileError} = useQuery({
@@ -18,6 +21,26 @@ export default function ProfilePage() {
         },
         queryKey: ['profile']   //if key is same in another page ,it uses cached data in our browser
     })
+
+    const {mutate, isLoading} = useMutation({
+      mutationFn:({name, email, password}) => {
+          return updateProfile({
+            token: userState.userInfo.token,
+            userData: {name, email, password}
+          });
+      },
+      onSuccess: (data) =>{       //AFTER GETTING DATA FROM BACKEND,THIS FUNCTION RUNS AUTOMATICALLY
+        dispatch(userActions.setUserInfo(data));
+        localStorage.setItem('account',JSON.stringify(data));
+        queryClient.invalidateQueries(['profile']);
+        toast.success("Profile is updated");
+      },
+      onError: (error) => {
+        toast.error(error.message);
+        console.log(error);
+      }
+  });
+
 
     useEffect( () => {
       if(!userState.userInfo){
@@ -38,7 +61,8 @@ export default function ProfilePage() {
         mode:"onChange"
     })
     const submitHandler = (data) =>{
-        
+        const {name, email, password} = data;
+        mutate({name, email, password});
     };
     
 
@@ -106,29 +130,20 @@ export default function ProfilePage() {
                 htmlFor="password"
                 className="text-[#5a7184] font-semibold block"
               >
-                Password
+                New Password (optional)
               </label>
               <input
                 type="password"
                 id="password"
-                {...register("password",{
-                    required:{
-                        value:true,
-                        message:"Password is required"
-                    },
-                    minLength:{
-                        value:6,
-                        message:"Password length must be atleast 6 character"
-                    }
-                })}
-                placeholder="Enter password"
+                {...register("password")}
+                placeholder="Enter new password"
                 className={`placeholder:text-[#959ead] text-dark-hard mt-3 rounded-lg px-5 py-4 font-semibold block outline-none border border-[#c3cad9] ${errors.password? "border-red-500": "border-[#c3cad9]"}`} />
                 {errors.password?.message && (
                 <p className='text-red-500 text-xs mt-1'>{errors.password?.message}</p>
               )}
             </div>
            
-            <button type='submit' disabled={!isValid || profileIsLoading} className='bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg my-6 disabled:opacity-70 disabled:cursor-not-allowed'>Register</button>
+            <button type='submit' disabled={!isValid || profileIsLoading} className='bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg my-6 disabled:opacity-70 disabled:cursor-not-allowed'>Update</button>
             </form>
         </div>
       </section>

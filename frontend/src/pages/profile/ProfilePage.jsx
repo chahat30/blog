@@ -22,7 +22,7 @@ export default function ProfilePage() {
         queryKey: ['profile']   //if key is same in another page ,it uses cached data in our browser
     })
 
-    const {mutate, isLoading} = useMutation({
+    const {mutate, isLoading: updateProfileIsLoading } = useMutation({
       mutationFn:({name, email, password}) => {
           return updateProfile({
             token: userState.userInfo.token,
@@ -143,7 +143,7 @@ export default function ProfilePage() {
               )}
             </div>
            
-            <button type='submit' disabled={!isValid || profileIsLoading} className='bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg my-6 disabled:opacity-70 disabled:cursor-not-allowed'>Update</button>
+            <button type='submit' disabled={!isValid || profileIsLoading || updateProfileIsLoading} className='bg-primary text-white font-bold text-lg py-4 px-8 w-full rounded-lg my-6 disabled:opacity-70 disabled:cursor-not-allowed'>Update</button>
             </form>
         </div>
       </section>

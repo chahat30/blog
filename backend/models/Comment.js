@@ -21,5 +21,11 @@ const CommentSchema= new Schema({
 }
 );
 
+CommentSchema.virtual("replies", {
+    ref:"Comment",
+    localField:"_id",
+    foreignField:"parents"
+})
+
 const Comment = model("Comment", CommentSchema);     //model name, schema
 export default Comment;

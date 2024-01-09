@@ -21,3 +21,13 @@ export const authGuard = async (req, res, next) => {
         next(err);
     }
 }
+
+export const adminGaurd = (req, res, next) => {
+    if(req.user && req.user.admin){
+        next()
+    } else {
+        let error = new Error("Not authorized as an admin");
+        error.statusCode = 401;
+        next(error);
+    }
+}

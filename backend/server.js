@@ -6,6 +6,7 @@ import { errorResponseHandler, invalidPathHandler } from "./middleware/errorHand
 
 //Routes
 import userRoutes from "./routes/userRoutes";
+import postRoutes from "./routes/postRoutes";
 
 dotenv.config();
 connectDB();
@@ -27,7 +28,8 @@ app.use((req,res,next) => {
     }
     next();
 })
-app.use('/api/users',userRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
 
 //static assets
 app.use('/uploads',express.static(path.join(__dirname,"/uploads")));

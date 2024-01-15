@@ -7,8 +7,8 @@ import {v4 as uuidv4} from "uuid";
 export const createPost= async (req, res, next) => {
     try {
         const post = new Post({
-            title: "sample title",
-            caption: "sample caption",
+            title: "sample title2",
+            caption: "sample caption2",
             slug: uuidv4(),
             body: {
                 type: "doc",
@@ -94,5 +94,23 @@ export const deletePost = async (req, res, next) => {
 
     } catch (error) {
         next(error);
+    }
+}
+
+export const getPost = async (req, res, next) =>{
+    try {
+        const post = await Post.findOne({slug:req.params.slug}).populate([
+            {
+                path:'user',
+                select: ["avatar","name"]
+            },
+        ]);
+        if(!post){
+            const error = new Error("Post not found");
+            return next(error);
+        }
+        return res.json(post);
+    } catch (error) {
+        
     }
 }

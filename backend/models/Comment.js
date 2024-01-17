@@ -17,14 +17,15 @@ const CommentSchema= new Schema({
     }
 },
 {
-    timestamps: true        //options: automatically adds 2 fields: created at and updated at
+    timestamps: true,        //options: automatically adds 2 fields: created at and updated at
+    toJSON: {virtuals:true}
 }
 );
 
 CommentSchema.virtual("replies", {
     ref:"Comment",
     localField:"_id",
-    foreignField:"parents"
+    foreignField:"parent"
 })
 
 const Comment = model("Comment", CommentSchema);     //model name, schema

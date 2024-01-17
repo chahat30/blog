@@ -11,7 +11,8 @@ const PostSchema= new Schema({
     categories: [{type: Schema.Types.ObjectId, ref: "PostCategories"}]
 },
 {
-    timestamps: true        //options: automatically adds 2 fields: created at and updated at
+    timestamps: true,        //options: automatically adds 2 fields: created at and updated at
+    toJSON: {virtuals:true}
 }
 );
 

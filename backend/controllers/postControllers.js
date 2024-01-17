@@ -104,6 +104,25 @@ export const getPost = async (req, res, next) =>{
                 path:'user',
                 select: ["avatar","name"]
             },
+            {
+                path:'comments',
+                match: {
+                    check:true,
+                    parent: null
+                },
+                populate:[
+                    {
+                        path:'user',
+                        select: ["avatar","name"]
+                    },
+                    {
+                        path:'replies',
+                        match: {
+                            check: true
+                        },
+                    },
+                ],
+            },
         ]);
         if(!post){
             const error = new Error("Post not found");

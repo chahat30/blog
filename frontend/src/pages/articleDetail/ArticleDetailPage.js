@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import MainLayout from '../../components/MainLayout'
 import BreadCrumbs from '../../components/BreadCrumbs'
 import {images, stables} from '../../constants';
@@ -8,6 +8,13 @@ import CommentsContainer from '../../components/comments/CommentsContainer';
 import SocialShareButtons from '../../components/SocialShareButtons';
 import { getSinglePost } from '../../services/index/posts';
 import { useQuery} from '@tanstack/react-query';
+import { generateHTML } from '@tiptap/html';
+import Bold from '@tiptap/extension-bold';
+import Document from '@tiptap/extension-document';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
+import Italic from '@tiptap/extension-italic';
+import parse from 'html-react-parser';
 
 const postsData=[
     {
@@ -50,19 +57,31 @@ export default function ArticleDetailPage() {
 
   const { slug } = useParams();
   const [breadCrumbsData, setbreadCrumbsData] = useState([]);
+  const [body, setBody] = useState(null);
 
   const { data, isLoading, isError } = useQuery({
     queryFn: () => getSinglePost({ slug }),
     queryKey: ["blog", slug],
-    onSuccess: (data) => {
+  });
+
+  useEffect(()=>{
+    if(data){
       setbreadCrumbsData([
         { name: "Home", link: "/" },
         { name: "Blog", link: "/blog" },
         { name: "Article title", link: `/blog/${data.slug}` },
       ]);
-      console.log(breadCrumbsData);
-    },
-  });
+      setBody(
+        parse(generateHTML(data?.body,[
+          Bold,
+          Italic,
+          Text,
+          Paragraph,
+          Document
+        ]))
+        );
+    }
+  },[data]);
 
   return (
     <MainLayout>
@@ -88,16 +107,8 @@ export default function ArticleDetailPage() {
           <h1 className="text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]">
             {data?.title}
           </h1>
-          <div className="mt-4 text-dark-soft">
-            <p className="leading-7">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
-              pretium consequat est, et vulputate ligula elementum vel. Nam
-              congue felis id maximus aliquam. Etiam interdum odio et fringilla
-              ornare. Mauris vehicula nisi purus, a ullamcorper nisi eleifend
-              eget. Donec nec nunc a velit vestibulum ultricies in ac risus.
-              Nunc ut vehicula nunc. Maecenas tincidunt accumsan tempus. Quisque
-              ut hendrerit metus.
-            </p>
+          <div className="mt-4 prose prose-sm sm:prose-base">
+            {body}
           </div>
           <CommentsContainer className="mt-10" logginedUserId="a" />
         </article>

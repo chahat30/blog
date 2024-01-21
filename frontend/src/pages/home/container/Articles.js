@@ -5,6 +5,7 @@ import { getAllPosts } from '../../../services/index/posts';
 import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import ArticleCardSkeleton from '../../../components/ArticleCardSkeleton';
+import ErrorMessage from '../../../components/ErrorMessage';
 
 export default function Articles() {
 
@@ -23,7 +24,7 @@ export default function Articles() {
           [...Array(3)].map((item,index)=>(
             <ArticleCardSkeleton key={index} className="w-full md:w-[calc(50%-20px)] lg:w-[calc(33.33%-21px)]"/>
           ))
-        ): data.map((post) => (
+        ): isError? <ErrorMessage message="Couldn't fetch the posts"/> : data.map((post) => (
           <ArticleCard key={post._id} post={post} className="w-full md:w-[calc(50%-20px)] lg:w-[calc(33.33%-21px)]"/>
         ))}
       </div>

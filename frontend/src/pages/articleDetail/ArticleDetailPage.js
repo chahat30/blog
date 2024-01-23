@@ -14,6 +14,7 @@ import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import Italic from '@tiptap/extension-italic';
+import { useSelector} from 'react-redux';
 import parse from 'html-react-parser';
 import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -58,6 +59,7 @@ const tagsData=[
 export default function ArticleDetailPage() {
 
   const { slug } = useParams();
+  const userState = useSelector(state => state.user);
   const [breadCrumbsData, setbreadCrumbsData] = useState([]);
   const [body, setBody] = useState(null);
 
@@ -113,7 +115,7 @@ export default function ArticleDetailPage() {
           <div className="mt-4 prose prose-sm sm:prose-base">
             {body}
           </div>
-          <CommentsContainer className="mt-10" logginedUserId="a" />
+          <CommentsContainer comments={data?.comments} className="mt-10" logginedUserId={userState?.userInfo?._id} />
         </article>
         <div>
           <SuggestedPosts

@@ -115,7 +115,7 @@ export default function ArticleDetailPage() {
           <div className="mt-4 prose prose-sm sm:prose-base">
             {body}
           </div>
-          <CommentsContainer comments={data?.comments} className="mt-10" logginedUserId={userState?.userInfo?._id} />
+          <CommentsContainer comments={data?.comments} className="mt-10" logginedUserId={userState?.userInfo?._id} postSlug={slug}/>
         </article>
         <div>
           <SuggestedPosts

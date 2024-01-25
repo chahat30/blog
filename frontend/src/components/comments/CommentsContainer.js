@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import CommentForm from "./CommentForm";
 import Comment from "./Comment";
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import {useSelector} from 'react-redux';
-import { createComment } from "../../services/index/comments";
+import { createComment, updateComment } from "../../services/index/comments";
 import toast from 'react-hot-toast';
 
 export default function CommentsContainer({ className, logginedUserId, comments, postSlug }) {
   
+  const queryClient = useQueryClient();
   const userState = useSelector(state => state.user);
   const [affectedComment, setAffectedComment] = useState(null);
 
@@ -19,9 +20,22 @@ export default function CommentsContainer({ className, logginedUserId, comments,
       toast.success("Your comment is sent successfully, it will be visible after comfirmation from the admin");
     },
     onError: (error)=>{
-      token.error(error.message);
+      toast.error(error.message);
     }
-  })
+  });
+
+  const {mutate: mutateUpdateComment} = useMutation({
+    mutationFn: ({token, desc, commentId}) =>{
+      return updateComment({token, desc, commentId});
+    },
+    onSuccess: ()=>{
+      toast.success("Your comment is updated successfully");
+      queryClient.invalidateQueries(["blog",postSlug]);
+    },
+    onError: (error)=>{
+      toast.error(error.message);
+    }
+  });
 
   const addCommentHandler = (text, parent = null, replyOnUser = null) => {
     mutateNewComment({desc: text, parent, replyOnUser, token: userState.userInfo.token, slug:postSlug });
@@ -29,6 +43,7 @@ export default function CommentsContainer({ className, logginedUserId, comments,
   };
 
   const updateCommentHandler=(value,commentId)=>{
+    mutateUpdateComment({token: userState.userInfo.token, desc:value, commentId})
     setAffectedComment(null);
   }
 

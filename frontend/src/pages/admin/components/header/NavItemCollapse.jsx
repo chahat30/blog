@@ -1,10 +1,16 @@
-import React from 'react'
-import { useState } from 'react';
+import React from 'react';
+import { useState,useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function NavItemCollapse({title, content, icon, name, activeNavName, setActiveNavName}) {
 
   const[isChecked,setIsChecked] = useState(false);
+
+  useEffect(() => {
+    if(activeNavName !== name) {
+      setIsChecked(false);
+    }
+  },[activeNavName,name])
 
   return (
     <div className="collapse collapse-arrow bg-base-200 min-h-0 rounded-none py-2">

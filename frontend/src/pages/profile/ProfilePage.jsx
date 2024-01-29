@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import {useForm} from 'react-hook-form';
 import {useNavigate} from 'react-router-dom';
 import MainLayout from '../../components/MainLayout';
@@ -54,12 +54,14 @@ export default function ProfilePage() {
             email:"",
             password:"",
         },
-        values:{
+        values: useMemo(() => {
+          return {
             name: profileIsLoading? "" : profileData.name,
             email: profileIsLoading? "" : profileData.email,
-        },
+        }
+        },[profileData?.email, profileData?.name, profileIsLoading]) ,
         mode:"onChange"
-    })
+    });
     const submitHandler = (data) =>{
         const {name, email, password} = data;
         mutate({name, email, password});

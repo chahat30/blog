@@ -6,6 +6,7 @@ import RegisterPage from './pages/register/RegisterPage';
 import {Toaster} from 'react-hot-toast';
 import LoginPage from './pages/login/LoginPage';
 import ProfilePage from './pages/profile/ProfilePage';
+import AdminLayout from './pages/admin/AdminLayout';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route index path="/register" element={<RegisterPage/>}/>
         <Route index path="/login" element={<LoginPage/>}/>
         <Route index path="/profile" element={<ProfilePage/>}/>
+        <Route index path="/admin" element={<AdminLayout/>}/>
       </Routes>
       <Toaster/>
       </div>

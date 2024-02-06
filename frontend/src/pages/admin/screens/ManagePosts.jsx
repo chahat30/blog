@@ -210,7 +210,7 @@ const ManagePosts = () => {
                             deletePostHandler({slug: post?.slug, token:userState.userInfo.token})
                           }} disabled={isLoadingDeletePost} type="button" className="text-red-600 hover:text-red-900 disabled:opacity-70 disabled:cursor-not-allowed">Delete</button>
                           <Link
-                            to="/"
+                            to={`/admin/posts/manage/edit/${post?.slug}`}
                             className="text-green-600 hover:text-green-900"
                           >
                             Edit

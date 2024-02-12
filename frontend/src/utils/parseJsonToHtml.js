@@ -4,6 +4,10 @@ import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import Italic from '@tiptap/extension-italic';
+import Strike from '@tiptap/extension-strike';
+import ListItem from '@tiptap/extension-list-item'
+import OrderedList from '@tiptap/extension-ordered-list'
+import BulletList from '@tiptap/extension-bullet-list'
 import parse from 'html-react-parser';
 
 const parseJsonToHtml  = (json) =>{
@@ -12,7 +16,11 @@ const parseJsonToHtml  = (json) =>{
         Italic,
         Text,
         Paragraph,
-        Document
+        Document,
+        Strike,
+        ListItem,
+        OrderedList,
+        BulletList
       ]));
 };
 

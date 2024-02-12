@@ -32,4 +32,5 @@ export const extensions = [
   CodeBlockLowlight.configure({
     lowlight,
   }),
+  
 ];

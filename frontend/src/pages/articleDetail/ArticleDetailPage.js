@@ -12,6 +12,7 @@ import { useSelector} from 'react-redux';
 import ArticleDetailSkeleton from './components/ArticleDetailSkeleton';
 import ErrorMessage from '../../components/ErrorMessage';
 import parseJsonToHtml from '../../utils/parseJsonToHtml';
+import Editor from '../../components/editor/Editor';
 
 export default function ArticleDetailPage() {
 
@@ -66,9 +67,11 @@ export default function ArticleDetailPage() {
           <h1 className="text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]">
             {data?.title}
           </h1>
-          <div className="mt-4 prose prose-sm sm:prose-base">
-            {body}
-          </div>
+          <div className="w-full">
+            {!isLoading && !isError && (
+                <Editor content={data?.body} editable={false} />
+            )}
+            </div>
           <CommentsContainer comments={data?.comments} className="mt-10" logginedUserId={userState?.userInfo?._id} postSlug={slug}/>
         </article>
         <div>

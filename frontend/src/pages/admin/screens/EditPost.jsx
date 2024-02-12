@@ -9,6 +9,7 @@ import { stables } from '../../../constants';
 import { AiOutlineCamera } from "react-icons/ai";
 import toast from 'react-hot-toast';
 import { useSelector} from 'react-redux';
+import Editor from '../../../components/editor/Editor';
 
 export default function EditPost() {
 
@@ -17,8 +18,8 @@ export default function EditPost() {
     const userState = useSelector(state => state.user);
     const[initialPhoto, setInitialPhoto] = useState(null);
     const [photo,setPhoto] = useState(null);
-    const [body, setBody] = useState(null);
- 
+    const [body,setBody] = useState(null);
+   
     const { data, isLoading, isError } = useQuery({
         queryFn: () => getSinglePost({ slug }),
         queryKey: ["blog", slug],
@@ -41,7 +42,6 @@ export default function EditPost() {
     useEffect(()=>{
         if(!isLoading && !isError){
             setInitialPhoto(data?.photo);
-            setBody(parseJsonToHtml(data?.body));
         }
     },[data, isError, isLoading]);
 
@@ -64,7 +64,7 @@ export default function EditPost() {
             const picture = await urlToObject(stables.UPLOAD_FOLDER_BASE_URL + data?.photo);
             updatedData.append("postPicture",picture);
         }
-        updatedData.append("document",JSON.stringify({}));
+        updatedData.append("document",JSON.stringify({body}));
         mutateUpdatePostDetail({updatedData,slug,token: userState.userInfo.token});
     }
 
@@ -104,8 +104,12 @@ export default function EditPost() {
           <h1 className="text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]">
             {data?.title}
           </h1>
-          <div className="mt-4 prose prose-sm sm:prose-base">
-            {body}
+          <div className="w-full">
+            {!isLoading && !isError && (
+                <Editor content={data?.body} editable={true} onDataChange={(data)=> {
+                    setBody(data);
+                }}/>
+            )}
           </div>
           <button disabled={isLoadingUpdatePostDetail} type='button' onClick={handleUpdatePost} className='w-full bg-green-500 text-white font-semibold rounded-lg px-4 py-2 disabled:cursor-not-allowed disabled:opacity-70'>
             Update Post

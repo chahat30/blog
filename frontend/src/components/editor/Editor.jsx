@@ -11,7 +11,7 @@ const Editor = ({ onDataChange, content, editable }) => {
     editorProps: {          //You can use it to override various editor events or change editor DOM element attributes, for example to add some Tailwind classes
       attributes: {
         class:
-          "prose dark:prose-invert prose-sm sm:prose-base max-w-none mt-7 focus:outline-none prose-pre:bg-[#282c34] prose-pre:text-[#abb2bf]",
+          "!prose !dark:prose-invert prose-sm sm:prose-base max-w-none mt-7 focus:outline-none prose-pre:bg-[#282c34] prose-pre:text-[#abb2bf]",
       },
     },
     onUpdate: ({ editor }) => {

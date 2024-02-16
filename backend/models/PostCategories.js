@@ -1,7 +1,7 @@
 import {Schema , model } from 'mongoose';
 
 const PostCategoriesSchema= new Schema({
-    name: { type: String, required: true },
+    title: { type: String, required: true },
 },
 {
     timestamps: true        //options: automatically adds 2 fields: created at and updated at

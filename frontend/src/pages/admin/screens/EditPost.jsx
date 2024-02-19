@@ -12,6 +12,7 @@ import Editor from '../../../components/editor/Editor';
 import MultiSelectTagDropdown from '../components/header/MultiSelectTagDropdown';
 import { getAllCategories } from '../../../services/index/postCategories';
 import { categoryToOption, filterCategories } from '../../../utils/multiSelectTagUtils';
+import CreatableSelect from 'react-select/creatable';
 
 const promiseOptions = async (inputValue) =>{
     const categoriesData = await getAllCategories();
@@ -27,10 +28,14 @@ export default function EditPost() {
     const [photo,setPhoto] = useState(null);
     const [body,setBody] = useState(null);
     const [categories, setCategories] = useState(null);
-   
+    const [title, setTitle] = useState("");
+    const [tags,setTags]= useState(null);
+    const [caption,setCaption] = useState("");
+
     const { data, isLoading, isError } = useQuery({
         queryFn: () => getSinglePost({ slug }),
         queryKey: ["blog", slug],
+        refetchOnWindowFocus: false
       });
 
     const {mutate: mutateUpdatePostDetail,isLoading:isLoadingUpdatePostDetail }= useMutation({
@@ -51,6 +56,9 @@ export default function EditPost() {
         if(!isLoading && !isError){
             setInitialPhoto(data?.photo);
             setCategories(data.categories.map((item)=> item._id));
+            setTitle(data?.title);
+            setTags(data?.tags);
+            setCaption(data?.caption);
         }
     },[data, isError, isLoading]);
 
@@ -73,7 +81,7 @@ export default function EditPost() {
             const picture = await urlToObject(stables.UPLOAD_FOLDER_BASE_URL + data?.photo);
             updatedData.append("postPicture",picture);
         }
-        updatedData.append("document",JSON.stringify({body, categories}));
+        updatedData.append("document",JSON.stringify({body, categories,title, tags, caption}));
         mutateUpdatePostDetail({updatedData,slug,token: userState.userInfo.token});
     }
 
@@ -137,20 +145,65 @@ export default function EditPost() {
                 </Link>
               ))}
             </div>
-            <h1 className="text-xl font-medium font-roboto mt-4 text-dark-hard md:text-[26px]">
-              {data?.title}
-            </h1>
-            <div className="my-5">
+            <div className="d-form-control w-full">
+              <label className='d-label' htmlFor="title">
+                <span className='d-label-text'>Title</span>
+              </label>
+              <input
+                value={title}
+                id="title"
+                className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder='title'
+              />
+            </div>
+            <div className="d-form-control w-full">
+              <label className='d-label' htmlFor="caption">
+                <span className='d-label-text'>Caption</span>
+              </label>
+              <input
+                value={caption}
+                id="caption"
+                className="d-input d-input-bordered border-slate-300 !outline-slate-300 text-xl font-medium font-roboto text-dark-hard"
+                onChange={(e) => setCaption(e.target.value)}
+                placeholder='caption'
+              />
+            </div>
+
+            <div className="mb-5 mt-2">
+            <label className='d-label' >
+                <span className='d-label-text'>Categories</span>
+              </label>
               {isPostDataLoadead && (
                 <MultiSelectTagDropdown
                   loadOptions={promiseOptions}
-                  onChange={(newValue) => 
-                    setCategories(newValue.map((item)=> item.value))
+                  onChange={(newValue) =>
+                    setCategories(newValue.map((item) => item.value))
                   }
                   defaultValue={data.categories.map(categoryToOption)}
                 />
               )}
             </div>
+
+            <div className="mb-5 mt-2">
+            <label className='d-label' >
+                <span className='d-label-text'>Tags</span>
+              </label>
+              {isPostDataLoadead && (
+                <CreatableSelect
+                  onChange={(newValue) =>
+                    setTags(newValue.map((item) => item.value))
+                  }
+                  defaultValue={data.tags.map((tag) => ({
+                    value:tag,
+                    label:tag
+                  }))}
+                  isMulti
+                  className='relative z-20'
+                />
+              )}
+            </div>
+
             <div className="w-full">
               {isPostDataLoadead && (
                 <Editor

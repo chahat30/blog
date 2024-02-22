@@ -177,7 +177,9 @@ const ManagePosts = () => {
                         <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                           <p className="text-gray-900 whitespace-no-wrap">
                             {post.categories.length > 0
-                              ? post.categories[0]
+                              ? post.categories.slice(0,3).map((category,index)=>(
+                                `${category?.title}${post.categories.slice(0,3).length === index+1 ? "":", "}`
+                                ))
                               : "Uncategorized"}
                           </p>
                         </td>

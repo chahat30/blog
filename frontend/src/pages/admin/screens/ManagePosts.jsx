@@ -35,9 +35,9 @@ const ManagePosts = () => {
     },
   });
 
-  useEffect(() => {
-    console.log(postsData);
-  }, [postsData]);
+  // useEffect(() => {
+  //   console.log(postsData);
+  // }, [postsData]);
 
   return (
     <DataTable

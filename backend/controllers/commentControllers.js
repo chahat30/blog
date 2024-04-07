@@ -27,7 +27,7 @@ export const createComment = async (req, res, next) =>{
 
 export const updateComment = async (req, res, next) =>{
     try {
-        const {desc} = req.body;
+        const {desc,check} = req.body;
         const comment = await Comment.findById(req.params.commentId);
 
         if(!comment){
@@ -35,6 +35,7 @@ export const updateComment = async (req, res, next) =>{
             return next(error);
         }
         comment.desc = desc || comment.desc;
+        comment.check= typeof check !=="undefined" ? check: comment.check;
         const updatedComment = await comment.save();
         return res.json(updatedComment);
         

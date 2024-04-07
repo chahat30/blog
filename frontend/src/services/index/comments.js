@@ -18,7 +18,7 @@ export const createComment = async ({token, desc, slug, parent, replyOnUser}) =>
     }
 };
 
-export const updateComment = async ({token, desc, commentId}) =>{
+export const updateComment = async ({token, desc, check, commentId}) =>{
     try {
         const config = {
             headers: {
@@ -26,7 +26,7 @@ export const updateComment = async ({token, desc, commentId}) =>{
             },
         }
         const {data} = await axios.put(`http://localhost:5001/api/comments/${commentId}`,{
-            desc
+            desc, check
         },config);
         return data;
     } catch (error) {

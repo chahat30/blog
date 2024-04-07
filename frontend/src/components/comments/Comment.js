@@ -28,7 +28,7 @@ export default function Comment({
   const replyOnUserId = comment.user._id;
 
   return (
-    <div className="flex flex-nowrap items-start gap-x-3 p-3 rounded-lg bg-[#F2F4F5]">
+    <div id={`comment-${comment?._id}`} className="flex flex-nowrap items-start gap-x-3 p-3 rounded-lg bg-[#F2F4F5]">
       <img
         src={comment?.user?.avatar ? stables.UPLOAD_FOLDER_BASE_URL + comment.user.avatar: images.userImage }
         alt="user profile"

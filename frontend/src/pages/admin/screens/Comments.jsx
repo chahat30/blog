@@ -1,9 +1,11 @@
 import React from 'react'
 import { useDataTable } from '../../../hooks/useDataTable';
-import { deleteComment, getAllComments } from '../../../services/index/comments';
+import { deleteComment, getAllComments, updateComment } from '../../../services/index/comments';
 import DataTable from '../components/DataTable';
 import { images, stables } from '../../../constants';
 import { Link } from "react-router-dom";
+import { useMutation ,useQueryClient, useQuery} from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 export default function Comments() {
 
@@ -32,6 +34,20 @@ export default function Comments() {
     },
   });
 
+  const {mutate: mutateUpdateCommentCheck, isLoading: isLoadingUpdateCommentCheck} = useMutation({
+    mutationFn: ({token, check, commentId})=>{
+      return updateComment({token, check,commentId});
+    },
+    onSuccess:(data)=>{
+      queryClient.invalidateQueries(["comments"]);
+      toast.success(data?.check ? "comment is aprooved" : "Comment is not aprooved");
+    },
+    onError:(error)=>{
+      toast.error(error.message);
+      console.log(error);
+    }
+  })
+
   return (
     <DataTable
       pageTitle="Manage Comments"
@@ -40,7 +56,13 @@ export default function Comments() {
       searchKeywordSubmitHandler={submitSearchKeywordHandler}
       searchKeywordOnChangeHandler={searchKeywordHandler}
       searchKeyword={searchKeyword}
-      tableHeaderTitleList={["Author", "Comment", "In Respond to", "Created At", ""]}
+      tableHeaderTitleList={[
+        "Author",
+        "Comment",
+        "In Respond to",
+        "Created At",
+        "",
+      ]}
       isLoading={isLoading}
       isFetching={isFetching}
       data={commentsData?.data}
@@ -67,53 +89,68 @@ export default function Comments() {
                 </a>
               </div>
               <div className="ml-3">
-                <p className="text-gray-900 whitespace-no-wrap">{comment?.user?.name}</p>
+                <p className="text-gray-900 whitespace-no-wrap">
+                  {comment?.user?.name}
+                </p>
               </div>
             </div>
           </td>
-          {/* <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <p className="text-gray-900 whitespace-no-wrap">
-              {post.categories.length > 0
-                ? post.categories
-                    .slice(0, 3)
-                    .map(
-                      (category, index) =>
-                        `${category?.title}${
-                          post.categories.slice(0, 3).length === index + 1
-                            ? ""
-                            : ", "
-                        }`
-                    )
-                : "Uncategorized"}
-            </p>
-          </td> */}
           <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
+            {comment?.replyOnUser != null && (
+              <p className="text-gray-900 whitespace-no-wrap">
+                In reply to{" "}
+                <Link
+                  to={`/blog/${comment?.post?.slug}/#comment-${comment?._id}`}
+                  className="text-blue-500"
+                >
+                  {comment?.replyOnUser?.name}
+                </Link>
+              </p>
+            )}
             <p className="text-gray-900 whitespace-no-wrap">
-              {/* {new Date(post.createdAt).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })} */}
               {comment?.desc}
             </p>
           </td>
-          {/* <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-            <div className="flex gap-x-2">
-              {post.tags.length > 0
-                ? post.tags.map((tag, index) => (
-                    <p>
-                      {tag}
-                      {post.tags.length - 1 !== index && ","}
-                    </p>
-                  ))
-                : "No tags"}
-            </div>
-          </td> */}
-          {/* <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
+          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">  
+              <p className="text-gray-900 whitespace-no-wrap">              
+                <Link
+                  to={`/blog/${comment?.post?.slug}`}
+                  className="text-blue-500"
+                >
+                  {comment?.post?.title}
+                </Link>
+              </p>          
+          </td>
+          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">  
+              <p className="text-gray-900 whitespace-no-wrap">              
+                {new Date(comment.createdAt).toLocaleDateString("en-US",{
+                  day: "2-digit",
+                  month: "2-digit",
+                  year: "numeric",
+                  hour:"numeric",
+                  minute:"numeric"
+                })}
+              </p>          
+          </td>
+          <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
+            <button
+              onClick={() => {
+                mutateUpdateCommentCheck({
+                  commentId: comment?._id,
+                  token: userState.userInfo.token,
+                  check:comment?.check ? false : true
+                });
+              }}
+              disabled={isLoadingDeleteData}
+              type="button"
+              className= {`${comment?.check ? "text-yellow-600 hover:text-yellow-900":"text-green-600 hover:text-green-900"} disabled:opacity-70 disabled:cursor-not-allowed`}
+            >
+              {comment?.check ? "Unapproved" : "Approve"}
+            </button>
             <button
               onClick={() => {
                 deleteDataHandler({
-                  slug: post?.slug,
+                  commentId: comment?._id,
                   token: userState.userInfo.token,
                 });
               }}
@@ -123,13 +160,7 @@ export default function Comments() {
             >
               Delete
             </button>
-            <Link
-              to={`/admin/posts/manage/edit/${post?.slug}`}
-              className="text-green-600 hover:text-green-900"
-            >
-              Edit
-            </Link>
-          </td> */}
+          </td>
         </tr>
       ))}
     </DataTable>

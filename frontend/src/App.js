@@ -11,6 +11,7 @@ import Admin from './pages/admin/screens/Admin';
 import Comments from './pages/admin/screens/Comments';
 import ManagePosts from './pages/admin/screens/ManagePosts';
 import EditPost from './pages/admin/screens/EditPost';
+import Categories from './pages/admin/screens/categories/Categories';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/admin/comments" element={<Comments/>}/>
           <Route path="/admin/posts/manage" element={<ManagePosts/>}/>
           <Route path="/admin/posts/manage/edit/:slug" element={<EditPost/>}/>
+          <Route path="/admin/categories/manage" element={<Categories/>}/>
         </Route>
       </Routes>
       <Toaster/>

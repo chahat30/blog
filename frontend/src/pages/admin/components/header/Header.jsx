@@ -109,6 +109,7 @@ export default function Header() {
               >
                 <Link to="/admin/posts/manage">Manage All Posts</Link>
                 <button disabled={isLoadingCreatePost} className='text-start disabled:opacity-60 disabled:cursor-not-allowed' onClick={() => handleCreateNewPost({token:userState.userInfo.token})}>Add New Post</button>
+                <Link to="/admin/categories/manage">Categories</Link>
                 </NavItemCollapse>
             </div>
           </div>

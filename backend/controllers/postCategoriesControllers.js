@@ -19,6 +19,21 @@ export const createPostCategory =async (req, res, next) =>{
     }
 }
 
+export const getSingleCategory =async (req, res, next) =>{
+    try {
+        
+        const PostCategory = await PostCategories.findById(req.params.postCategoryId);
+        if(!PostCategory){
+            const error = new Error("Category not found!");
+            return next(error);
+        }
+       
+        return res.json(PostCategory);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export const getAllPostCategories =async (req, res, next) =>{
     try {
         

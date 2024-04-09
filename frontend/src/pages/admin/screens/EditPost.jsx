@@ -50,7 +50,7 @@ export default function EditPost() {
             toast.error(error.message);
             console.log(error);
         }
-    })
+    });
 
     useEffect(()=>{
         if(!isLoading && !isError){

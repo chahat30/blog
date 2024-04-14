@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const signup = async ({name, email, password}) =>{
     try {
-        const {data} = await axios.post('http://localhost:5001/api/users/register',{
+        const {data} = await axios.post('https://blog-backend-dt5r.onrender.com/api/users/register',{
             name,
             email,
             password
@@ -17,7 +17,7 @@ export const signup = async ({name, email, password}) =>{
 
 export const login = async ({ email, password}) =>{
     try {
-        const {data} = await axios.post('http://localhost:5001/api/users/login',{
+        const {data} = await axios.post('https://blog-backend-dt5r.onrender.com/api/users/login',{
             email,
             password
         });
@@ -36,7 +36,7 @@ export const getUserProfile = async ({ token }) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.get('http://localhost:5001/api/users/profile', config);
+        const {data} = await axios.get('https://blog-backend-dt5r.onrender.com/api/users/profile', config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -52,7 +52,7 @@ export const updateProfile = async ({ token, userData }) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.put('http://localhost:5001/api/users/updateProfile', userData,config);
+        const {data} = await axios.put('https://blog-backend-dt5r.onrender.com/api/users/updateProfile', userData,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -69,7 +69,7 @@ export const updateProfilePicture = async ({ token, formData }) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.put('http://localhost:5001/api/users/updateProfilePicture', formData,config);
+        const {data} = await axios.put('https://blog-backend-dt5r.onrender.com/api/users/updateProfilePicture', formData,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)

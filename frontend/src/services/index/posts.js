@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getAllPosts = async (searchKeyword = "", page = 1, limit = 10) =>{
     try {
-        const {data, headers} = await axios.get(`http://localhost:5001/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`);
+        const {data, headers} = await axios.get(`https://blog-backend-dt5r.onrender.com/api/posts?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`);
         return {data, headers};
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -13,7 +13,7 @@ export const getAllPosts = async (searchKeyword = "", page = 1, limit = 10) =>{
 
 export const getSinglePost = async ({slug}) =>{
     try {
-        const {data} = await axios.get(`http://localhost:5001/api/posts/${slug}`);
+        const {data} = await axios.get(`https://blog-backend-dt5r.onrender.com/api/posts/${slug}`);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -29,7 +29,7 @@ export const deletePost = async ({slug, token}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.delete(`http://localhost:5001/api/posts/${slug}`, config);
+        const {data} = await axios.delete(`https://blog-backend-dt5r.onrender.com/api/posts/${slug}`, config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -45,7 +45,7 @@ export const updatePost = async ({updatedData, slug, token}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.put(`http://localhost:5001/api/posts/${slug}`,updatedData ,config);
+        const {data} = await axios.put(`https://blog-backend-dt5r.onrender.com/api/posts/${slug}`,updatedData ,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -61,7 +61,7 @@ export const createPost = async ({ token}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.post(`http://localhost:5001/api/posts`,{} ,config);
+        const {data} = await axios.post(`https://blog-backend-dt5r.onrender.com/api/posts`,{} ,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)

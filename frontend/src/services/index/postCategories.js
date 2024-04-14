@@ -3,7 +3,7 @@ import axios from 'axios';
 export const getAllCategories = async (searchKeyword = "", page = 1, limit = 10) =>{
     try {
         
-        const {data,headers} = await axios.get(`http://localhost:5001/api/post-categories?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`);
+        const {data,headers} = await axios.get(`https://blog-backend-dt5r.onrender.com/api/post-categories?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`);
         return {data, headers};
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -19,7 +19,7 @@ export const deleteCategory = async ({slug, token}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.delete(`http://localhost:5001/api/post-categories/${slug}`, config);
+        const {data} = await axios.delete(`https://blog-backend-dt5r.onrender.com/api/post-categories/${slug}`, config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -35,7 +35,7 @@ export const createCategory = async ({ token, title}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.post(`http://localhost:5001/api/post-categories`, {title} ,config);
+        const {data} = await axios.post(`https://blog-backend-dt5r.onrender.com/api/post-categories`, {title} ,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -51,7 +51,7 @@ export const updateCategory = async ({ token, title, slug}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.put(`http://localhost:5001/api/post-categories/${slug}`, {title} ,config);
+        const {data} = await axios.put(`https://blog-backend-dt5r.onrender.com/api/post-categories/${slug}`, {title} ,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -62,7 +62,7 @@ export const updateCategory = async ({ token, title, slug}) =>{
 
 export const getSingleCategory = async ({ slug}) =>{
     try {
-        const {data} = await axios.get(`http://localhost:5001/api/post-categories/${slug}`);
+        const {data} = await axios.get(`https://blog-backend-dt5r.onrender.com/api/post-categories/${slug}`);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)

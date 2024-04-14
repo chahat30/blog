@@ -7,7 +7,7 @@ export const createComment = async ({token, desc, slug, parent, replyOnUser}) =>
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.post('http://localhost:5001/api/comments',{
+        const {data} = await axios.post('https://blog-backend-dt5r.onrender.com/api/comments',{
             desc, slug, parent, replyOnUser
         },config);
         return data;
@@ -25,7 +25,7 @@ export const updateComment = async ({token, desc, check, commentId}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.put(`http://localhost:5001/api/comments/${commentId}`,{
+        const {data} = await axios.put(`https://blog-backend-dt5r.onrender.com/api/comments/${commentId}`,{
             desc, check
         },config);
         return data;
@@ -43,7 +43,7 @@ export const deleteComment = async ({token, commentId}) =>{
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.delete(`http://localhost:5001/api/comments/${commentId}`,config);
+        const {data} = await axios.delete(`https://blog-backend-dt5r.onrender.com/api/comments/${commentId}`,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)
@@ -61,7 +61,7 @@ export const getAllComments = async (token, searchKeyword = "", page = 1, limit 
                 Authorization: `Bearer ${token}`,
             },
         };
-        const {data, headers} = await axios.get(`http://localhost:5001/api/comments?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`,config);
+        const {data, headers} = await axios.get(`https://blog-backend-dt5r.onrender.com/api/comments?searchKeyword=${searchKeyword}&page=${page}&limit=${limit}`,config);
         return {data, headers};
     } catch (error) {
         if(error.response && error.response.data.message)

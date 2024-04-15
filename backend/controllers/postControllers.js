@@ -86,7 +86,7 @@ export const deletePost = async (req, res, next) => {
             const error = new Error("Post not found");
             next(error);
         }
-
+        fileRemover(post.photo);
         await Comment.deleteMany({post : post._id});
         return res.json({
             message: "Post is successfully deleted",

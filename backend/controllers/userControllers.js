@@ -92,10 +92,23 @@ export const userProfile = async (req, res, next) =>{
 
 export const updateProfile = async (req, res, next) => {
     try {
-        let user = await User.findById(req.user._id);
+        const userIdToUpdate = req.params.userId;
+        let userId = req.user._id;
+        if(!req.user.admin && userId!==userIdToUpdate){
+            let error = new Error("Forbidden Resource");
+            error.statusCode = 403;
+            throw error;
+        }
+
+        let user = await User.findById(userIdToUpdate);
         if(!user){   //if user not found with this id
             throw new Error("User not found");
         }
+
+        if(typeof req.body.admin!=="undefined" && req.user.admin){
+            user.admin= req.body.admin;
+        }
+
         user.name = req.body.name || user.name; //The line of code essentially says: "If req.body.name is defined (i.e., it has a value), update the user.name property with the value of req.body.name. If req.body.name is not defined or is falsy (e.g., null, undefined, or an empty string), leave user.name unchanged."
         user.email= req.body.email || user.email;
         if(req.body.password && req.body.password.length < 6) {
@@ -221,7 +234,13 @@ export const deleteUser = async(req,res,next)=>{
         await Post.deleteMany({
             _id: {$in: postIdsToDelete}
         })
+
+        postsToDelete.forEach((post)=>{
+            fileRemover(post.photo)
+        })
+
         await user.remove();
+        fileRemover(user.avatar);
         res.status(204).json({
             message:"User deleted successfully"
         })

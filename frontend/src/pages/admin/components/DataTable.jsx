@@ -54,8 +54,8 @@ export default function DataTable({
               <table className="min-w-full leading-normal">
                 <thead>
                   <tr>
-                    {tableHeaderTitleList.map((title)=>(
-                        <th
+                    {tableHeaderTitleList.map((title,index)=>(
+                        <th key={index}
                         scope="col"
                         className="px-5 py-3 text-sm font-normal text-left text-gray-800 uppercase bg-white border-b border-gray-200"
                       >

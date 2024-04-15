@@ -145,7 +145,7 @@ export default function Comments() {
               type="button"
               className= {`${comment?.check ? "text-yellow-600 hover:text-yellow-900":"text-green-600 hover:text-green-900"} disabled:opacity-70 disabled:cursor-not-allowed`}
             >
-              {comment?.check ? "Unapproved" : "Approve"}
+              {comment?.check ? "Unapprove" : "Approve"}
             </button>
             <button
               onClick={() => {

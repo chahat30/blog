@@ -3,7 +3,7 @@ import {Link,useNavigate} from 'react-router-dom'
 import { images } from '../../../../constants'
 import { useState, useEffect } from 'react'
 import { AiFillDashboard, AiOutlineClose, AiOutlineMenu } from 'react-icons/ai';
-import { FaComments } from 'react-icons/fa';
+import { FaComments, FaUser } from 'react-icons/fa';
 import { MdDashboard } from 'react-icons/md';
 import NavItem from './NavItem';
 import { useWindowSize } from "@uidotdev/usehooks";
@@ -111,6 +111,14 @@ export default function Header() {
                 <button disabled={isLoadingCreatePost} className='text-start disabled:opacity-60 disabled:cursor-not-allowed' onClick={() => handleCreateNewPost({token:userState.userInfo.token})}>Add New Post</button>
                 <Link to="/admin/categories/manage">Categories</Link>
                 </NavItemCollapse>
+                <NavItem
+                title="Users"
+                link="/admin/users/manage"
+                icon={<FaUser className='text-xl'/>}
+                name="users"
+                activeNavName={activeNavName}
+                setActiveNavName={setActiveNavName}
+              />
             </div>
           </div>
         </div>

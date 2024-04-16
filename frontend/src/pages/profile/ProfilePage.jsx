@@ -26,7 +26,8 @@ export default function ProfilePage() {
       mutationFn:({name, email, password}) => {
           return updateProfile({
             token: userState.userInfo.token,
-            userData: {name, email, password}
+            userData: {name, email, password},
+            userId: userState.userInfo._id
           });
       },
       onSuccess: (data) =>{       //AFTER GETTING DATA FROM BACKEND,THIS FUNCTION RUNS AUTOMATICALLY

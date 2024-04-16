@@ -45,14 +45,14 @@ export const getUserProfile = async ({ token }) =>{
     }
 };
 
-export const updateProfile = async ({ token, userData }) =>{
+export const updateProfile = async ({ token, userData, userId }) =>{
     try {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         }
-        const {data} = await axios.put('https://blog-backend-dt5r.onrender.com/api/users/updateProfile', userData,config);
+        const {data} = await axios.put(`https://blog-backend-dt5r.onrender.com/api/users/updateProfile/${userId}`, userData,config);
         return data;
     } catch (error) {
         if(error.response && error.response.data.message)

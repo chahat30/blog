@@ -1,8 +1,10 @@
 import React from 'react'
 import { useDataTable } from '../../../../hooks/useDataTable';
 import DataTable from '../../components/DataTable';
-import { deleteUser, getAllUsers } from '../../../../services/index/users';
+import { deleteUser, getAllUsers, updateProfile } from '../../../../services/index/users';
 import { images, stables } from '../../../../constants';
+import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 
 export default function Users() {
     const {
@@ -30,6 +32,33 @@ export default function Users() {
         },
       });
     
+      const {mutate: mutateUpdateUser,isLoading:isLoadingUpdateUser }= useMutation({
+        mutationFn:({isAdmin, userId})=> {
+            return updateProfile({
+                token:userState.userInfo.token,
+                userData: {admin:isAdmin},
+                userId
+            });
+        },
+        onSuccess: (data) =>{
+            queryClient.invalidateQueries(["users"]);
+            toast.success("User is updated");
+        },
+        onError: (error)=>{
+            toast.error(error.message);
+            console.log(error);
+        }
+    })
+
+    const handleAdminCheck = (event ,  userId)=>{
+        const initialCheckValue = !event.target.checked;
+        if(window.confirm("Do you want to change the admin status of this user?")){
+            mutateUpdateUser({isAdmin:event.target.checked, userId})
+        }else{
+            event.target.checked= initialCheckValue;
+        }
+    }
+
       // useEffect(() => {
       //   console.log(postsData);
       // }, [postsData]);
@@ -42,7 +71,14 @@ export default function Users() {
           searchKeywordSubmitHandler={submitSearchKeywordHandler}
           searchKeywordOnChangeHandler={searchKeywordHandler}
           searchKeyword={searchKeyword}
-          tableHeaderTitleList={["Name", "Email", "Created At", "Is Verified", "Is Admin",""]}
+          tableHeaderTitleList={[
+            "Name",
+            "Email",
+            "Created At",
+            "Is Verified",
+            "Is Admin",
+            "",
+          ]}
           isLoading={isLoading}
           isFetching={isFetching}
           data={usersData?.data}
@@ -69,14 +105,14 @@ export default function Users() {
                     </a>
                   </div>
                   <div className="ml-3">
-                    <p className="text-gray-900 whitespace-no-wrap">{user.name}</p>
+                    <p className="text-gray-900 whitespace-no-wrap">
+                      {user.name}
+                    </p>
                   </div>
                 </div>
               </td>
               <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-                <p className="text-gray-900 whitespace-no-wrap">
-                  {user.email}
-                </p>
+                <p className="text-gray-900 whitespace-no-wrap">{user.email}</p>
               </td>
               <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
                 <p className="text-gray-900 whitespace-no-wrap">
@@ -88,16 +124,20 @@ export default function Users() {
                 </p>
               </td>
               <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-              <p className="text-gray-900 whitespace-no-wrap">
-                  {user.verified ? "Verified":"Not verified "}
+                <p className="text-gray-900 whitespace-no-wrap">
+                  {user.verified ? "Verified" : "Not verified "}
                 </p>
               </td>
               <td className="px-5 py-5 text-sm bg-white border-b border-gray-200">
-              <p className="text-gray-900 whitespace-no-wrap">
-                  {user.admin ? "Admin":"Not admin "}
-                </p>
+                <input
+                  defaultChecked={user.admin}
+                  type="checkbox"
+                  className="d-checkbox disabled:bg-orange-400 disabled:opacity-100 checked:bg-[url('../public/images/check.png')] bg-cover checked:disabled:bg-none"
+                  onChange={(event)=>handleAdminCheck(event,user._id)}
+                  disabled={isLoadingUpdateUser}
+                />
               </td>
-              <td className="px-5 py-5 text-sm bg-white border-b border-gray-200 space-x-5">
+              <td className="px-5 pyd-5 text-sm bg-white border-b border-gray-200 space-x-5">
                 <button
                   onClick={() => {
                     deleteDataHandler({
@@ -111,7 +151,6 @@ export default function Users() {
                 >
                   Delete
                 </button>
-                
               </td>
             </tr>
           ))}

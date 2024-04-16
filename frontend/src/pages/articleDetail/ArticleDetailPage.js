@@ -27,6 +27,7 @@ export default function ArticleDetailPage() {
   });
 
   useEffect(()=>{
+    window.scrollTo(0,0);
     if(data){
       setbreadCrumbsData([
         { name: "Home", link: "/" },

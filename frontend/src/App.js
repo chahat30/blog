@@ -14,6 +14,7 @@ import EditPost from './pages/admin/screens/EditPost';
 import Categories from './pages/admin/screens/categories/Categories';
 import EditCategories from './pages/admin/screens/categories/EditCategories';
 import Users from './pages/admin/screens/users/Users';
+import BlogPage from './pages/blog/BlogPage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Routes>
         <Route index path="/" element={<Home/>}/>
         <Route path="/blog/:slug" element={<ArticleDetailPage/>}/>
+        <Route path="/blog" element={<BlogPage/>}/>
         <Route index path="/register" element={<RegisterPage/>}/>
         <Route index path="/login" element={<LoginPage/>}/>
         <Route index path="/profile" element={<ProfilePage/>}/>

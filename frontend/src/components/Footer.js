@@ -80,7 +80,7 @@ export default function Footer() {
           </ul>
         </div>
         <div className='col-span-10 md:order-first md:col-span-4 lg:col-span-2'>
-          <img src={images.logo} alt="logo" className='brighness-0 invert mx-auto md:mx-0'></img>
+          <img src={images.logo} alt="logo" className=' w-28 brighness-0 invert mx-auto md:mx-0'></img>
           <p className='text-sm text-dark-light text-center mt-4 md:text-base md:text-left lg:text-sm'>Build a modern and creative website with crealand</p>
           <ul className='flex justify-center mt-5 items-center space-x-4 text-gray-300 md:justify-start'>
             <li>

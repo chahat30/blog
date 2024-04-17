@@ -60,7 +60,7 @@ export default function Header() {
   return (
     <header className="h-fit flex w-full items-center justify-between p-4 lg:h-full lg:max-w-[300px] lg:flex-col lg:items-start lg:justify-start lg:p-0">
       <Link to="/">
-        <img src={images.logo} alt="logo" className="w-16 lg:hidden" />
+        <img src={images.logo} alt="logo" className="w-28 lg:hidden" />
       </Link>
       <div className="cursor-pointer lg:hidden">
         {isMenuActive ? (
@@ -79,7 +79,7 @@ export default function Header() {
           {/* sidebar */}
           <div className="fixed top-0 bottom-0 left-0 z-50 w-3/4 overflow-y-auto bg-white p-4 lg:static lg:h-full lg:w-full lg:p-6">
             <Link to="/">
-              <img src={images.logo} alt="logo" className="w-16" />
+              <img src={images.logo} alt="logo" className="w-28" />
             </Link>
             <h4 className="mt-10 font-bold text-[#C7C7C7]">MAIN MENU</h4>
             {/* Menu Items */}

@@ -33,6 +33,12 @@ export const updatePost= async (req, res, next) => {
             next(error);
             return;
         }
+        
+        if(!post.user._id.equals(req.user._id)){
+            const error = new Error("Unauthorised to update post");
+            next(error);
+            return;
+        }
 
         const upload = uploadPicture.single('postPicture');  
 
@@ -85,6 +91,11 @@ export const deletePost = async (req, res, next) => {
         if(!post){
             const error = new Error("Post not found");
             next(error);
+        }
+        if(!post.user._id.equals(req.user._id)){
+            const error = new Error("Unauthorised to delete post");
+            next(error);
+            return;
         }
         fileRemover(post.photo);
         await Comment.deleteMany({post : post._id});

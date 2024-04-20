@@ -11,12 +11,12 @@ import { authGuard, adminGaurd } from "../middleware/authMiddleware";
 
 router
   .route("/")
-  .post(authGuard, adminGaurd, createPost)
+  .post(authGuard, createPost)
   .get(getAllPosts);
 router
   .route("/:slug")
-  .put(authGuard, adminGaurd, updatePost)
-  .delete(authGuard, adminGaurd, deletePost)
+  .put(authGuard, updatePost)
+  .delete(authGuard, deletePost)
   .get(getPost);
 
 
